@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33402.96
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForeverFast.Fluxor.Extensions", "ForeverFast.Fluxor.Extensions\ForeverFast.Fluxor.Extensions.csproj", "{163F8194-D605-47BE-AF30-5BAD1A374E78}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{B1447563-B96D-447F-B7E0-B5F29D097C44}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{163F8194-D605-47BE-AF30-5BAD1A374E78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{163F8194-D605-47BE-AF30-5BAD1A374E78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{163F8194-D605-47BE-AF30-5BAD1A374E78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{163F8194-D605-47BE-AF30-5BAD1A374E78}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{163F8194-D605-47BE-AF30-5BAD1A374E78} = {B1447563-B96D-447F-B7E0-B5F29D097C44}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {60233338-4E0A-4E37-88C1-6F9AFCE597A1}
+	EndGlobalSection
+EndGlobal

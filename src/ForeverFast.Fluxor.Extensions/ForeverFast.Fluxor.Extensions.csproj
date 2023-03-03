@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>ForeverFast.Fluxor.Extensions</Title>
+    <Version>0.0.1</Version>
+    <Authors>ForeverFast</Authors>
+    <Company>ForeverFast</Company>
+    <Description>Extensions for Fluxor</Description>
+    <PackageProjectUrl></PackageProjectUrl>
+    <Copyright>ForeverFast</Copyright>
+    <RepositoryUrl>https://github.com/ForeverFast/ForeverFast.Fluxor.Extensions</RepositoryUrl>
+    <PackageTags>Fluxor, Extensions, Blazor</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fluxor" Version="5.7.0" />
+  </ItemGroup>
+
+</Project>
