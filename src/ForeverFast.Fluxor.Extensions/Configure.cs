@@ -6,7 +6,7 @@ namespace ForeverFast.Fluxor.Extensions
 {
     public static class Configure
     {
-        public static FluxorOptions UseRouting(this FluxorOptions options, params Assembly[] assemblies)
+        public static FluxorOptions UseEntityAdapters(this FluxorOptions options, params Assembly[] assemblies)
         {
             Adapters.Scan(assemblies);
 

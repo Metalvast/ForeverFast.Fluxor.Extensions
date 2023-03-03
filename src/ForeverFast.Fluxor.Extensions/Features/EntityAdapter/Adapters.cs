@@ -16,7 +16,7 @@ namespace Fluxor.Extensions
             return (EntityAdapter<TKey, TEntity>)adapter;
         }
 
-        public static void Scan(params Assembly[] assemblies)
+        internal static void Scan(params Assembly[] assemblies)
         {
             var types = assemblies
                .SelectMany(x => x.GetTypes())
