@@ -7,11 +7,11 @@ namespace Fluxor.Extensions
         internal static Dictionary<Type, object> s_cachedAdapters { get; set; } = new();
 
         public static EntityAdapter<TKey, TEntity> Get<TKey, TEntity>()
-            where TEntity : class
             where TKey : notnull
+            where TEntity : AdapterEntity
         {
             if (!s_cachedAdapters.TryGetValue(typeof(TEntity), out var adapter))
-                throw new Exception();
+                throw new Exception($"Instance of {typeof(TEntity).FullName} not registered.");
 
             return (EntityAdapter<TKey, TEntity>)adapter;
         }

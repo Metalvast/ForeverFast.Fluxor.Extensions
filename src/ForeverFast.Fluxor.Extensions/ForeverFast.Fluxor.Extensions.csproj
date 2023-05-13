@@ -6,11 +6,11 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>ForeverFast.Fluxor.Extensions</Title>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
     <Authors>ForeverFast</Authors>
     <Company>ForeverFast</Company>
     <Description>Extensions for Fluxor</Description>
-    <PackageProjectUrl></PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/ForeverFast/ForeverFast.Fluxor.Extensions</PackageProjectUrl>
     <Copyright>ForeverFast</Copyright>
     <RepositoryUrl>https://github.com/ForeverFast/ForeverFast.Fluxor.Extensions</RepositoryUrl>
     <PackageTags>Fluxor, Extensions, Blazor</PackageTags>
