@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>ForeverFast.Fluxor.Extensions</Title>
-    <Version>0.0.2</Version>
+    <Version>0.0.3</Version>
     <Authors>ForeverFast</Authors>
     <Company>ForeverFast</Company>
     <Description>Extensions for Fluxor</Description>

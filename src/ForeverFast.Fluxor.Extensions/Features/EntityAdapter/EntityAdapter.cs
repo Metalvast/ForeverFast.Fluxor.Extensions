@@ -2,13 +2,24 @@
 
 namespace Fluxor.Extensions
 {
-    public abstract class EntityAdapter<TKey, TEntity>
+    public class EntityAdapter<TKey, TEntity>
         where TKey : notnull
-        where TEntity : AdapterEntity
+        where TEntity : class
     {
-        public abstract Func<TEntity, TKey> SelectId { get; }
+        #region Ctors
+        
+        public EntityAdapter(Func<TEntity, TKey> selectId)
+        {
+            SelectId = selectId;
+        }
 
-        public abstract EntityState<TKey, TEntity> GetInitialState();
+        #endregion
+
+        #region Public
+
+        public Func<TEntity, TKey> SelectId { get; }
+
+        #endregion
 
         #region Collection methods
 
@@ -17,14 +28,14 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="state"></param>
-        public TState Add<TState>(TEntity entity, EntityState<TKey, TEntity> state)
+        public TState Add<TState>(TEntity entity, TState state)
             where TState : EntityState<TKey, TEntity>
         {
             var entityKey = SelectId(entity);
 
             return state.Entities.ContainsKey(entityKey)
-                ? (TState)state
-                : (TState)state with
+                ? state
+                : state with
                 {
                     Entities = state.Entities.Add(entityKey, entity),
                 };
@@ -35,7 +46,7 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="entities"></param>
         /// <param name="state"></param>
-        public TState AddRange<TState>(IEnumerable<TEntity> entities, EntityState<TKey, TEntity> state)
+        public TState AddRange<TState>(IEnumerable<TEntity> entities, TState state)
              where TState : EntityState<TKey, TEntity>
         {
             var notAddedEntities = new Dictionary<TKey, TEntity>();
@@ -49,7 +60,7 @@ namespace Fluxor.Extensions
                 notAddedEntities.Add(entityKey, entity);
             }
 
-            return (TState)state with
+            return state with
             {
                 Entities = state.Entities.AddRange(notAddedEntities),
             };
@@ -60,9 +71,9 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="entities"></param>
         /// <param name="state"></param>
-        public TState SetAll<TState>(IEnumerable<TEntity> entities, EntityState<TKey, TEntity> state)
+        public TState SetAll<TState>(IEnumerable<TEntity> entities, TState state)
             where TState : EntityState<TKey, TEntity>
-            => (TState)state with
+            => state with
             {
                 Entities = entities.ToImmutableDictionary(entity => SelectId(entity), entity => entity),
             };
@@ -72,9 +83,9 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="state"></param>
-        public TState SetOne<TState>(TEntity entity, EntityState<TKey, TEntity> state)
+        public TState SetOne<TState>(TEntity entity, TState state)
             where TState : EntityState<TKey, TEntity>
-            => (TState)state with
+            => state with
             {
                 Entities = state.Entities.SetItem(SelectId(entity), entity),
             };
@@ -84,11 +95,12 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="entities"></param>
         /// <param name="state"></param>
-        public TState SetMany<TState>(IEnumerable<TEntity> entities, EntityState<TKey, TEntity> state)
+        public TState SetMany<TState>(IEnumerable<TEntity> entities, TState state)
             where TState : EntityState<TKey, TEntity>
-            => (TState)state with
+            => state with
             {
-                Entities = state.Entities.SetItems(entities.ToImmutableDictionary(entity => SelectId(entity), entity => entity)),
+                Entities = state.Entities
+                    .SetItems(entities.ToImmutableDictionary(entity => SelectId(entity), entity => entity)),
             };
 
 
@@ -97,9 +109,9 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="id"></param>
         /// <param name="state"></param>
-        public TState Remove<TState>(TKey id, EntityState<TKey, TEntity> state)
+        public TState Remove<TState>(TKey id, TState state)
             where TState : EntityState<TKey, TEntity>
-            => (TState)state with
+            => state with
             {
                 Entities = state.Entities.Remove(id),
             };
@@ -109,9 +121,9 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="ids"></param>
         /// <param name="state"></param>
-        public TState RemoveRange<TState>(IEnumerable<TKey> ids, EntityState<TKey, TEntity> state)
+        public TState RemoveRange<TState>(IEnumerable<TKey> ids, TState state)
             where TState : EntityState<TKey, TEntity>
-            => (TState)state with
+            => state with
             {
                 Entities = state.Entities.RemoveRange(ids),
             };
@@ -121,11 +133,14 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="ids"></param>
         /// <param name="state"></param>
-        public TState RemoveRange<TState>(Predicate<TEntity> predicate, EntityState<TKey, TEntity> state)
+        public TState RemoveRange<TState>(Predicate<TEntity> predicate, TState state)
              where TState : EntityState<TKey, TEntity>
-             => (TState)state with
+             => state with
              {
-                 Entities = state.Entities.RemoveRange(state.Entities.Where(x => predicate(x.Value)).Select(x => x.Key)),
+                 Entities = state.Entities
+                    .RemoveRange(state.Entities
+                        .Where(x => predicate(x.Value))
+                        .Select(x => x.Key)),
              };
 
         /// <summary>
@@ -133,9 +148,9 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="predicate"></param>
         /// <param name="state"></param>
-        public TState RemoveAll<TState>(EntityState<TKey, TEntity> state)
+        public TState RemoveAll<TState>(TState state)
              where TState : EntityState<TKey, TEntity>
-            => (TState)state with
+            => state with
             {
                 Entities = state.Entities.Clear(),
             };
@@ -147,14 +162,14 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="updatedEntity"></param>
         /// <param name="state"></param>
-        public TState Update<TState>(TEntity updatedEntity, EntityState<TKey, TEntity> state)
+        public TState Update<TState>(TEntity updatedEntity, TState state)
              where TState : EntityState<TKey, TEntity>
         {
             var entityKey = SelectId(updatedEntity);
 
             return !state.Entities.ContainsKey(entityKey)
-                ? (TState)state
-                : (TState)state with
+                ? state
+                : state with
                 {
                     Entities = state.Entities.SetItem(entityKey, updatedEntity),
                 };
@@ -166,7 +181,7 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="updatedEntities"></param>
         /// <param name="state"></param>
-        public TState UpdateRange<TState>(IEnumerable<TEntity> updatedEntities, EntityState<TKey, TEntity> state)
+        public TState UpdateRange<TState>(IEnumerable<TEntity> updatedEntities, TState state)
              where TState : EntityState<TKey, TEntity>
         {
             var targetEntities = new Dictionary<TKey, TEntity>();
@@ -180,7 +195,7 @@ namespace Fluxor.Extensions
                 targetEntities.Add(entityKey, entity);
             }
 
-            return (TState)state with
+            return state with
             {
                 Entities = state.Entities.SetItems(targetEntities),
             };
@@ -191,9 +206,9 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="state"></param>
-        public TState Upsert<TState>(TEntity entity, EntityState<TKey, TEntity> state)
+        public TState Upsert<TState>(TEntity entity, TState state)
              where TState : EntityState<TKey, TEntity>
-             => (TState)state with
+             => state with
              {
                  Entities = state.Entities.SetItem(SelectId(entity), entity),
              };
@@ -203,27 +218,28 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="entities"></param>
         /// <param name="state"></param>
-        public TState UpsertRange<TState>(IEnumerable<TEntity> entities, EntityState<TKey, TEntity> state)
+        public TState UpsertRange<TState>(IEnumerable<TEntity> entities, TState state)
             where TState : EntityState<TKey, TEntity>
-            => (TState)state with
+            => state with
             {
                 Entities = entities.ToImmutableDictionary(entity => SelectId(entity), entity => entity),
             };
 
-        public TState Map<TState>(TKey id, Func<TEntity, TEntity> updateFunc, EntityState<TKey, TEntity> state)
+        public TState Map<TState>(TKey id, Func<TEntity, TEntity> updateFunc, TState state)
              where TState : EntityState<TKey, TEntity>
-             => (TState)state with
+             => state with
              {
                  Entities = state.Entities.SetItem(id, updateFunc(state.Entities[id])),
              };
 
-        public TState MapRange<TState>(IEnumerable<TKey> ids, Func<TEntity, TEntity> updateFunc, EntityState<TKey, TEntity> state)
+        public TState MapRange<TState>(IEnumerable<TKey> ids, Func<TEntity, TEntity> updateFunc, TState state)
              where TState : EntityState<TKey, TEntity>
-             => (TState)state with
+             => state with
              {
-                 Entities = state.Entities.SetItems(state.Entities
-                     .Where(x => ids.Contains(x.Key))
-                     .ToImmutableDictionary(x => x.Key, x => updateFunc(x.Value))),
+                 Entities = state.Entities
+                    .SetItems(state.Entities
+                        .Where(x => ids.Contains(x.Key))
+                        .ToImmutableDictionary(x => x.Key, x => updateFunc(x.Value))),
              };
 
         #endregion
