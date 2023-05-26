@@ -28,7 +28,7 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="state"></param>
-        public TState Add<TState>(TEntity entity, TState state)
+        public TState Add<TState>(TState state, TEntity entity)
             where TState : EntityState<TKey, TEntity>
         {
             var entityKey = SelectId(entity);
@@ -46,7 +46,7 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="entities"></param>
         /// <param name="state"></param>
-        public TState AddRange<TState>(IEnumerable<TEntity> entities, TState state)
+        public TState AddRange<TState>(TState state, IEnumerable<TEntity> entities)
              where TState : EntityState<TKey, TEntity>
         {
             var notAddedEntities = new Dictionary<TKey, TEntity>();
@@ -71,7 +71,7 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="entities"></param>
         /// <param name="state"></param>
-        public TState SetAll<TState>(IEnumerable<TEntity> entities, TState state)
+        public TState SetAll<TState>(TState state, IEnumerable<TEntity> entities)
             where TState : EntityState<TKey, TEntity>
             => state with
             {
@@ -83,7 +83,7 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="state"></param>
-        public TState SetOne<TState>(TEntity entity, TState state)
+        public TState SetOne<TState>(TState state, TEntity entity)
             where TState : EntityState<TKey, TEntity>
             => state with
             {
@@ -95,7 +95,7 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="entities"></param>
         /// <param name="state"></param>
-        public TState SetMany<TState>(IEnumerable<TEntity> entities, TState state)
+        public TState SetMany<TState>(TState state, IEnumerable<TEntity> entities)
             where TState : EntityState<TKey, TEntity>
             => state with
             {
@@ -109,7 +109,7 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="id"></param>
         /// <param name="state"></param>
-        public TState Remove<TState>(TKey id, TState state)
+        public TState Remove<TState>(TState state, TKey id)
             where TState : EntityState<TKey, TEntity>
             => state with
             {
@@ -121,7 +121,7 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="ids"></param>
         /// <param name="state"></param>
-        public TState RemoveRange<TState>(IEnumerable<TKey> ids, TState state)
+        public TState RemoveRange<TState>(TState state, IEnumerable<TKey> ids)
             where TState : EntityState<TKey, TEntity>
             => state with
             {
@@ -133,7 +133,7 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="ids"></param>
         /// <param name="state"></param>
-        public TState RemoveRange<TState>(Predicate<TEntity> predicate, TState state)
+        public TState RemoveRange<TState>(TState state, Predicate<TEntity> predicate)
              where TState : EntityState<TKey, TEntity>
              => state with
              {
@@ -162,7 +162,7 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="updatedEntity"></param>
         /// <param name="state"></param>
-        public TState Update<TState>(TEntity updatedEntity, TState state)
+        public TState Update<TState>(TState state, TEntity updatedEntity)
              where TState : EntityState<TKey, TEntity>
         {
             var entityKey = SelectId(updatedEntity);
@@ -181,7 +181,7 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="updatedEntities"></param>
         /// <param name="state"></param>
-        public TState UpdateRange<TState>(IEnumerable<TEntity> updatedEntities, TState state)
+        public TState UpdateRange<TState>(TState state, IEnumerable<TEntity> updatedEntities)
              where TState : EntityState<TKey, TEntity>
         {
             var targetEntities = new Dictionary<TKey, TEntity>();
@@ -206,7 +206,7 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="state"></param>
-        public TState Upsert<TState>(TEntity entity, TState state)
+        public TState Upsert<TState>(TState state, TEntity entity)
              where TState : EntityState<TKey, TEntity>
              => state with
              {
@@ -218,21 +218,21 @@ namespace Fluxor.Extensions
         /// </summary>
         /// <param name="entities"></param>
         /// <param name="state"></param>
-        public TState UpsertRange<TState>(IEnumerable<TEntity> entities, TState state)
+        public TState UpsertRange<TState>(TState state, IEnumerable<TEntity> entities)
             where TState : EntityState<TKey, TEntity>
             => state with
             {
                 Entities = entities.ToImmutableDictionary(entity => SelectId(entity), entity => entity),
             };
 
-        public TState Map<TState>(TKey id, Func<TEntity, TEntity> updateFunc, TState state)
+        public TState Map<TState>(TState state, TKey id, Func<TEntity, TEntity> updateFunc)
              where TState : EntityState<TKey, TEntity>
              => state with
              {
                  Entities = state.Entities.SetItem(id, updateFunc(state.Entities[id])),
              };
 
-        public TState MapRange<TState>(IEnumerable<TKey> ids, Func<TEntity, TEntity> updateFunc, TState state)
+        public TState MapRange<TState>(TState state, IEnumerable<TKey> ids, Func<TEntity, TEntity> updateFunc)
              where TState : EntityState<TKey, TEntity>
              => state with
              {
